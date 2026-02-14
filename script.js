@@ -5,13 +5,16 @@ function startMusic() {
   bgm.volume = 0.5;
   bgm.play().catch(()=>{});
   document.removeEventListener("click", startMusic);
+  document.removeEventListener("touchstart", startMusic);
 }
 
 document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
 
 
 // ================== SAO RƠI ==================
 const icons = ["⭐","🌟","✨","☆","★","✧","✦","⋆"];
+
 const cards = [
   { img:"anh1.jpg", text:"❤️Chúc Diễm năm mới sẽ có thêm thật là nhiều niềm vui ❤️" },
   { img:"anh2.jpg", text:"❤️‍🩹Năm mới mong Diễm sẽ luôn được bình an và nhẹ lòng❤️‍🩹" },
@@ -19,8 +22,14 @@ const cards = [
   { img:"anh4.jpg", text:"🍀Mong rằng sang năm mới sẽ có thật nhiều sự may mắn và tốt đẹp tới với Diễm🍀" },
   { img:"anh5.jpg", text:"💕Mong Diễm sẽ luôn nhận được sự yêu thương và trân trọng 💕" },
   { img:"anh6.jpg", text:"☁️Chúc cho Diễm có một năm nhẹ nhàng và ít phải lo nghĩ nhe ☁️" },
-  { img:"anh7.jpg", text:"💜Mong cho Diễm có một năm thật thuận lợi và hạnh phúc 💜"}
+  { img:"anh7.jpg", text:"💜Mong cho Diễm có một năm thật thuận lợi và hạnh phúc 💜" }
 ];
+
+// 🔥 PRELOAD ẢNH – FIX DELAY
+cards.forEach(card => {
+  const img = new Image();
+  img.src = card.img;
+});
 
 let index = 0;
 
@@ -37,19 +46,26 @@ function showCard(){
 
 function createStar(){
   const star = document.createElement("div");
-  star.className="star";
+  star.className = "star";
   star.textContent = icons[Math.floor(Math.random()*icons.length)];
-  star.style.left = Math.random()*window.innerWidth+"px";
-  star.style.fontSize = (20+Math.random()*20)+"px";
-  star.style.animationDuration = (5+Math.random()*4)+"s";
+  star.style.left = Math.random()*window.innerWidth + "px";
+  star.style.fontSize = (18 + Math.random()*22) + "px";
+  star.style.animationDuration = (5 + Math.random()*3) + "s";
+  star.style.textShadow = "0 0 8px white, 0 0 15px #4cc9f0";
+
   star.onclick = showCard;
+
   document.body.appendChild(star);
-  setTimeout(()=>star.remove(),9000);
+
+  setTimeout(() => {
+    if(star.parentNode) star.remove();
+  }, 8000);
 }
 
-setInterval(createStar,700);
+// Giảm tần suất để web nhẹ hơn
+setInterval(createStar, 900);
 
-popup.onclick=()=>popup.style.display="none";
+popup.onclick = () => popup.style.display = "none";
 
 
 // ================== PHÁO HOA ==================
@@ -61,52 +77,55 @@ function resize(){
   canvas.height = window.innerHeight;
 }
 resize();
-window.addEventListener("resize",resize);
+window.addEventListener("resize", resize);
 
 class Particle{
   constructor(x,y,vx,vy,color){
-    this.x=x;
-    this.y=y;
-    this.vx=vx;
-    this.vy=vy;
-    this.life=100;
-    this.color=color;
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.life = 100;
+    this.color = color;
   }
+
   update(){
-    this.x+=this.vx;
-    this.y+=this.vy;
-    this.vy+=0.03;
-    this.vx*=0.99;
-    this.vy*=0.99;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.02;
+    this.vx *= 0.98;
+    this.vy *= 0.98;
     this.life--;
   }
+
   draw(){
-    ctx.globalAlpha=this.life/100;
+    ctx.globalAlpha = this.life / 100;
     ctx.beginPath();
-    ctx.arc(this.x,this.y,2,0,Math.PI*2);
-    ctx.fillStyle=this.color;
+    ctx.arc(this.x, this.y, 2, 0, Math.PI*2);
+    ctx.fillStyle = this.color;
     ctx.fill();
-    ctx.globalAlpha=1;
+    ctx.globalAlpha = 1;
   }
 }
 
-let particles=[];
+let particles = [];
 
 function explode(x,y){
-  const color=`hsl(${Math.random()*360},100%,60%)`;
-  const type=Math.floor(Math.random()*4);
+  const color = `hsl(${Math.random()*360},100%,60%)`;
+  const type = Math.floor(Math.random()*4);
 
   if(type===0) circleShape(x,y,color);
-  else if(type===1) heartShape(x,y,color);
-  else if(type===2) starShape(x,y,color);
-  else flowerShape(x,y,color);
+  if(type===1) heartShape(x,y,color);
+  if(type===2) starShape(x,y,color);
+  if(type===3) flowerShape(x,y,color);
 }
 
+// ---- HÌNH TRÒN ----
 function circleShape(x,y,color){
-  const count=100;
+  const count = 100;
   for(let i=0;i<count;i++){
-    const angle=(Math.PI*2/count)*i;
-    const speed=3+Math.random()*2;
+    const angle = (Math.PI*2/count)*i;
+    const speed = 2 + Math.random()*2;
     particles.push(new Particle(
       x,y,
       Math.cos(angle)*speed,
@@ -116,13 +135,14 @@ function circleShape(x,y,color){
   }
 }
 
+// ---- HÌNH TRÁI TIM ----
 function heartShape(x,y,color){
-  for(let t=0;t<Math.PI*2;t+=0.05){
-    const hx=16*Math.pow(Math.sin(t),3);
-    const hy=13*Math.cos(t)
-            -5*Math.cos(2*t)
-            -2*Math.cos(3*t)
-            -Math.cos(4*t);
+  for(let t=0;t<Math.PI*2;t+=0.08){
+    const hx = 16*Math.pow(Math.sin(t),3);
+    const hy = 13*Math.cos(t)
+              -5*Math.cos(2*t)
+              -2*Math.cos(3*t)
+              -Math.cos(4*t);
     particles.push(new Particle(
       x,y,
       hx*0.25,
@@ -132,13 +152,15 @@ function heartShape(x,y,color){
   }
 }
 
+// ---- HÌNH SAO ----
 function starShape(x,y,color){
-  const spikes=5;
-  const outer=5;
-  const inner=2.5;
+  const spikes = 5;
+  const outer = 5;
+  const inner = 2.5;
+
   for(let i=0;i<spikes*2;i++){
-    const r=i%2===0?outer:inner;
-    const angle=(Math.PI*i)/spikes;
+    const r = i%2===0 ? outer : inner;
+    const angle = (Math.PI*i)/spikes;
     particles.push(new Particle(
       x,y,
       Math.cos(angle)*r,
@@ -148,10 +170,11 @@ function starShape(x,y,color){
   }
 }
 
+// ---- HÌNH HOA ----
 function flowerShape(x,y,color){
-  const petals=8;
+  const petals = 8;
   for(let i=0;i<petals;i++){
-    const angle=(Math.PI*2/petals)*i;
+    const angle = (Math.PI*2/petals)*i;
     for(let r=0;r<4;r++){
       particles.push(new Particle(
         x,y,
@@ -166,18 +189,21 @@ function flowerShape(x,y,color){
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  if(Math.random()<0.05){
+  // Giảm tần suất nổ để mượt hơn
+  if(Math.random()<0.025){
     explode(
       Math.random()*canvas.width,
       Math.random()*canvas.height*0.6
     );
   }
 
-  particles.forEach((p,i)=>{
-    p.update();
-    p.draw();
-    if(p.life<=0) particles.splice(i,1);
-  });
+  for(let i=particles.length-1;i>=0;i--){
+    particles[i].update();
+    particles[i].draw();
+    if(particles[i].life<=0){
+      particles.splice(i,1);
+    }
+  }
 
   requestAnimationFrame(animate);
 }
