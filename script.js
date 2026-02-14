@@ -16,13 +16,13 @@ document.addEventListener("touchstart", startMusic);
 const stars = ["⭐","🌟","✨","💫","🌠","✦","✧"];
 
 const cards = [
-  { img:"anh1.jpg", text:"💛Chúc chin gái năm mới sẽ có thêm thật là nhiều niềm vui 💛" },
-  { img:"anh2.jpg", text:"❤️‍🩹Năm mới mong chị sẽ luôn được bình an và nhẹ lòng❤️‍🩹" },
-  { img:"anh3.jpg", text:"😍Chúc chị sang năm mới sẽ ngày càng xinh đẹp hơn cả 😍" },
-  { img:"anh4.jpg", text:"🍀Mong rằng sang năm mới sẽ có thật nhiều sự may mắn và tốt đẹp tới với chị🍀" },
-  { img:"anh5.jpg", text:"💕Mong chị sẽ luôn nhận được sự yêu thương và trân trọng 💕" },
-  { img:"anh6.jpg", text:"☁️Chúc cho chị có một năm nhẹ nhàng và ít phải lo nghĩ nhe ☁️" },
-  { img:"anh7.jpg", text:"💜Mong cho chị có một năm thật thuận lợi và hạnh phúc 💜" }
+  { img:"anh1.jpg", text:"❤️Chúc Diễm năm mới sẽ có thêm thật là nhiều niềm vui ❤️" },
+  { img:"anh2.jpg", text:"❤️‍🩹Năm mới mong Diễm sẽ luôn được bình an và nhẹ lòng❤️‍🩹" },
+  { img:"anh3.jpg", text:"😍Chúc Diễm sang năm mới sẽ ngày càng xinh đẹp hơn cả 😍" },
+  { img:"anh4.jpg", text:"🍀Mong rằng sang năm mới sẽ có thật nhiều sự may mắn và tốt đẹp tới với Diễm🍀" },
+  { img:"anh5.jpg", text:"💕Mong Diễm sẽ luôn nhận được sự yêu thương và trân trọng 💕" },
+  { img:"anh6.jpg", text:"☁️Chúc cho Diễm có một năm nhẹ nhàng và ít phải lo nghĩ nhe ☁️" },
+  { img:"anh7.jpg", text:"💜Mong cho Diễm có một năm thật thuận lợi và hạnh phúc 💜" }
 ];
 
 // preload ảnh
